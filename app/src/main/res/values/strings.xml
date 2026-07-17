@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Coffee</string>
+    <string name="order_coffee">Order Coffee</string>
+    <string name="one_coffee">One Coffee</string>
+    <string name="six_coffees">Six Coffees</string>
+    <string name="twelve_coffees">Twelve Coffees</string>
+    <string name="choose_flavor">Choose Flavor</string>
+    <string name="latte">Latte</string>
+    <string name="hot_chocolate">Hot Chocolate</string>
+    <string name="chai">Chai</string>
+    <string name="matcha_latte">Matcha Latte</string>
+    <string name="coffee">Coffee</string>
+    <string name="frappuccino">Frappuccino</string>
+    <string name="cancel">Cancel</string>
+    <string name="next">Next</string>
+    <string name="choose_pickup_date">Choose Pickup Date</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="send">Send Order to Another App</string>
+    <string name="quantity">Quantity</string>
+    <string name="flavor">Flavor</string>
+    <string name="pickup_date">Pickup date</string>
+    <string name="subtotal_price">Subtotal %s</string>
+    <string name="total_price">Total %s</string>
+    <string name="new_coffee_order">New Coffee Order</string>
+    <string name="order_details">Quantity: %1$s \nFlavor: %2$s \nPickup date: %3$s \nTotal: %4$s \n\nThank you!</string>
+    <string name="back_button">Back</string>
+    <plurals name="coffees">
+        <item quantity="one">%d coffee</item>
+        <item quantity="other">%d coffees</item>
+    </plurals>
+</resources>
