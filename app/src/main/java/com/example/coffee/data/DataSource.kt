@@ -5,11 +5,11 @@ import com.example.coffee.R
 object DataSource {
 
     val flavors = listOf(
-        R.string.latte,
-        R.string.hot_chocolate,
-        R.string.chai,
-        R.string.matcha_latte,
-        R.string.frappuccino
+        R.string.vanilla,
+        R.string.chocolate,
+        R.string.caramel,
+        R.string.snicker_doodle,
+        R.string.cinnamon
     )
 
     val quantityOptions = listOf(

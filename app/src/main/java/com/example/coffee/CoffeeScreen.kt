@@ -1,7 +1,6 @@
 package com.example.coffee
 
 
-
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,10 +42,13 @@ import com.example.coffee.ui.theme.SelectOptionScreen
 import com.example.coffee.ui.theme.OrderSummaryScreen
 
 import com.example.coffee.R
+import com.example.coffee.ui.theme.MenuScreen
+import com.example.coffee.ui.theme.CoffeeDetailScreen
 
 
 enum class CoffeeScreen(@StringRes val title: Int) {
-    /* */
+    /* add new screens here */
+    Menu(title = R.string.app_name),
     Start(title = R.string.app_name),
     Flavor(title = R.string.choose_flavor),
     Pickup(title = R.string.choose_pickup_date),
@@ -87,9 +89,18 @@ fun CoffeeApp(
 ) {
 
     val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentScreen = CoffeeScreen.valueOf(
-        backStackEntry?.destination?.route ?: CoffeeScreen.Start.name
-    )
+    val currentRoute = backStackEntry?.destination?.route
+
+    val currentScreen = when (currentRoute) {
+        CoffeeScreen.Menu.name -> CoffeeScreen.Menu
+        CoffeeScreen.Start.name -> CoffeeScreen.Start
+        CoffeeScreen.Flavor.name -> CoffeeScreen.Flavor
+        CoffeeScreen.Pickup.name -> CoffeeScreen.Pickup
+        CoffeeScreen.Summary.name -> CoffeeScreen.Summary
+        "coffee/{routeId}" -> CoffeeScreen.Menu
+        else -> CoffeeScreen.Menu
+    }
+
 
     Scaffold(
         topBar = {
@@ -104,9 +115,29 @@ fun CoffeeApp(
 
         NavHost(
             navController = navController,
-            startDestination = CoffeeScreen.Start.name,
+            startDestination = CoffeeScreen.Menu.name,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(route = CoffeeScreen.Menu.name) {
+                MenuScreen(
+                    onItemClick = { routeId -> navController.navigate("coffee/$routeId") },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+
+
+            composable(route = "coffee/{routeId}") { backStackEntry ->
+                val routeId = backStackEntry.arguments?.getString("routeId").orEmpty()
+                CoffeeDetailScreen(
+                    routeId = routeId,
+                    onBack = { navController.navigateUp() },
+                    onNext = { quantity ->
+                        viewModel.setQuantity(quantity)
+                        navController.navigate(CoffeeScreen.Flavor.name)
+                    }
+                )
+            }
+
             composable(route = CoffeeScreen.Start.name) {
                 StartOrderScreen(
                     quantityOptions = DataSource.quantityOptions, // DataSource singleton object in DataSource.kt
@@ -125,7 +156,7 @@ fun CoffeeApp(
                 val context = LocalContext.current
                 SelectOptionScreen(
                     subtotal = uiState.price,
-                    onNextButtonClicked = { navController.navigate(CoffeeScreen.Pickup.name)},
+                    onNextButtonClicked = { navController.navigate(CoffeeScreen.Pickup.name) },
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)
                     },
@@ -140,7 +171,7 @@ fun CoffeeApp(
             composable(route = CoffeeScreen.Pickup.name) {
                 SelectOptionScreen(
                     subtotal = uiState.price,
-                    onNextButtonClicked = { navController.navigate(CoffeeScreen.Summary.name)},
+                    onNextButtonClicked = { navController.navigate(CoffeeScreen.Summary.name) },
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)
                     },
@@ -166,8 +197,6 @@ fun CoffeeApp(
             }
 
 
-
-
         }
 
 
@@ -179,8 +208,7 @@ private fun cancelOrderAndNavigateToStart(
     navController: NavHostController
 ) {
     viewModel.resetOrder()
-    navController.popBackStack(CoffeeScreen.Start.name, inclusive = false)
-
+    navController.popBackStack(CoffeeScreen.Menu.name, inclusive = false)
 
 
 }

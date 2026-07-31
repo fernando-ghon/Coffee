@@ -5,10 +5,11 @@
     <string name="six_coffees">Six Coffees $12</string>
     <string name="twelve_coffees">Twelve Coffees $24</string>
     <string name="choose_flavor">Choose Flavor</string>
-    <string name="latte">Latte</string>
-    <string name="hot_chocolate">Hot Chocolate</string>
-    <string name="chai">Chai</string>
-    <string name="matcha_latte">Matcha Latte</string>
+    <string name="vanilla">Vanilla</string>
+    <string name="chocolate">Chocolate</string>
+    <string name="caramel">Caramel</string>
+    <string name="snicker_doodle">Snickerdoodle</string>
+    <string name="cinnamon">Cinnamon</string>
     <string name="coffee">Coffee</string>
     <string name="frappuccino">Frappuccino</string>
     <string name="cancel">Cancel</string>
@@ -29,4 +30,6 @@
         <item quantity="one">%d coffee</item>
         <item quantity="other">%d coffees</item>
     </plurals>
+    <string name="caffe_americano">Caffe Americano</string>
+    <string name="caffe_mocha">Caffe Mocha</string>
 </resources>

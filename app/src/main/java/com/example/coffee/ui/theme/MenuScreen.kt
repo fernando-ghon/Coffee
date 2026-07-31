@@ -25,16 +25,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.coffee.R // IMPORTANT: use your app R, not androidx.activity.R
+import com.example.coffee.R
+import androidx.compose.foundation.clickable
 
 @Composable
 fun MenuElement(
     @DrawableRes drawable: Int,
     @StringRes text: Int,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.clickable { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
@@ -54,7 +56,10 @@ fun MenuElement(
 }
 
 @Composable
-fun MenuRow(modifier: Modifier = Modifier) {
+fun MenuRow(
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -63,7 +68,8 @@ fun MenuRow(modifier: Modifier = Modifier) {
         items(MenuData) { item ->
             MenuElement(
                 drawable = item.drawable,
-                text = item.text
+                text = item.text,
+                onClick = { onItemClick(item.routeId) }
             )
         }
     }
@@ -88,24 +94,43 @@ fun MenuSection(
 }
 
 @Composable
-fun MenuScreen(modifier: Modifier = Modifier) {
+fun MenuScreen(
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState())
     ) {
-        MenuSection(title = R.string.frappuccino) {
-            MenuRow()
+        MenuSection(title = R.string.app_name) {
+            MenuRow(onItemClick = onItemClick)
         }
     }
 }
 
 private data class DrawableStringPair(
+    val routeId: String,
     @DrawableRes val drawable: Int,
     @StringRes val text: Int
 )
 
 private val MenuData = listOf(
-    DrawableStringPair(R.drawable.frappuccino, R.string.frappuccino),
-    DrawableStringPair(R.drawable.coffee, R.string.chai)
+    DrawableStringPair(
+        routeId = "frappuccino",
+        drawable = R.drawable.frappuccino,
+        text = R.string.frappuccino
+    ),
+
+    DrawableStringPair(
+        routeId = "caffe americano",
+        drawable = R.drawable.caffe_americano_2,
+        text = R.string.caffe_americano
+    ),
+
+    DrawableStringPair(
+        routeId = "caffe mocha",
+        drawable = R.drawable.caffe_mocha,
+        text = R.string.caffe_mocha
+    )
 )
 
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
@@ -115,6 +140,7 @@ fun MenuElementPreview() {
         MenuElement(
             drawable = R.drawable.frappuccino,
             text = R.string.frappuccino,
+            onClick = {},
             modifier = Modifier.padding(8.dp)
         )
     }
@@ -124,15 +150,21 @@ fun MenuElementPreview() {
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
 @Composable
 fun MenuRowPreview() {
-    CoffeeTheme{ MenuRow()}
+    CoffeeTheme {
+        MenuRow(
+            onItemClick = {}
+        )
+    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
 @Composable
 fun MenuSectionPreview() {
-    CoffeeTheme{
+    CoffeeTheme {
         MenuSection(R.string.frappuccino) {
-            MenuRow()
+            MenuRow(
+                onItemClick = {}
+            )
         }
     }
 }
