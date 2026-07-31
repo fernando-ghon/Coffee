@@ -1,10 +1,14 @@
 package com.example.coffee
 
+
+
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+
 //import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.ArrowBack
+
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -37,24 +42,27 @@ import com.example.coffee.ui.theme.OrderViewModel
 import com.example.coffee.ui.theme.SelectOptionScreen
 import com.example.coffee.ui.theme.OrderSummaryScreen
 
+import com.example.coffee.R
 
-enum class CoffeeScreen() {
+
+enum class CoffeeScreen(@StringRes val title: Int) {
     /* */
-    Start,
-    Flavor,
-    Pickup,
-    Summary
+    Start(title = R.string.app_name),
+    Flavor(title = R.string.choose_flavor),
+    Pickup(title = R.string.choose_pickup_date),
+    Summary(title = R.string.order_summary)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoffeeAppBar(
+    currentScreen: CoffeeScreen,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(stringResource(id = R.string.app_name)) },
+        title = { Text(stringResource(currentScreen.title)) },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
@@ -63,7 +71,7 @@ fun CoffeeAppBar(
             if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
                     Icon(
-                        painter = painterResource(R.drawable.cupcake),
+                        painter = painterResource(R.drawable.arrow_back_24dp_e3e3e3_fill0_wght400_grad0_opsz24),
                         contentDescription = null
                     )
                 }
@@ -78,11 +86,17 @@ fun CoffeeApp(
     navController: NavHostController = rememberNavController()
 ) {
 
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentScreen = CoffeeScreen.valueOf(
+        backStackEntry?.destination?.route ?: CoffeeScreen.Start.name
+    )
+
     Scaffold(
         topBar = {
             CoffeeAppBar(
-                canNavigateBack = false,
-                navigateUp = { }
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() }
             )
         }
     ) { innerPadding ->
@@ -142,7 +156,9 @@ fun CoffeeApp(
                     onCancelButtonClicked = {
                         cancelOrderAndNavigateToStart(viewModel, navController)
                     },
-                    onSendButtonClicked = { subject: String, summary: String ->
+                    onNextButtonClicked = {
+                        viewModel.resetOrder()
+                        navController.popBackStack(CoffeeScreen.Start.name, inclusive = false)
 
                     },
                     modifier = Modifier.fillMaxHeight()

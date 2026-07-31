@@ -32,7 +32,7 @@ import com.example.coffee.ui.theme.CoffeeTheme
 fun OrderSummaryScreen(
     orderUiState: OrderUiState,
     onCancelButtonClicked: () -> Unit,
-    onSendButtonClicked: (String, String) -> Unit,
+    onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val resources = LocalContext.current.resources
@@ -88,9 +88,9 @@ fun OrderSummaryScreen(
             ) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { onSendButtonClicked(newOrder, orderSummary) }
+                    onClick = onNextButtonClicked
                 ) {
-                    Text(stringResource(R.string.send))
+                    Text(stringResource(R.string.submit))
                 }
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -109,7 +109,7 @@ fun OrderSummaryPreview() {
     CoffeeTheme {
         OrderSummaryScreen(
             orderUiState = OrderUiState(0, "Test", "Test", "$300.00"),
-            onSendButtonClicked = { subject: String, summary: String -> },
+            onNextButtonClicked = {},
             onCancelButtonClicked = {},
             modifier = Modifier.fillMaxHeight()
         )
