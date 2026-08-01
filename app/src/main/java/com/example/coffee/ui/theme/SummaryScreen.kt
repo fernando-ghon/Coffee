@@ -26,8 +26,6 @@ import com.example.coffee.ui.theme.components.FormattedPriceLabel
 import com.example.coffee.ui.theme.CoffeeTheme
 
 
-
-
 @Composable
 fun OrderSummaryScreen(
     orderUiState: OrderUiState,
@@ -37,27 +35,24 @@ fun OrderSummaryScreen(
 ) {
     val resources = LocalContext.current.resources
 
-    val numberOfCupcakes = resources.getQuantityString(
+    val numberOfItems = resources.getQuantityString(
         R.plurals.coffees,
         orderUiState.quantity,
         orderUiState.quantity
     )
-    //Load and format a string resource with the parameters.
+
     val orderSummary = stringResource(
         R.string.order_details,
-        numberOfCupcakes,
+        numberOfItems,
         orderUiState.flavor,
         orderUiState.date,
         orderUiState.quantity
     )
     val newOrder = stringResource(R.string.new_coffee_order)
-    //Create a list of order summary to display
+
     val items = listOf(
-        // Summary line 1: display selected quantity
-        Pair(stringResource(R.string.quantity), numberOfCupcakes),
-        // Summary line 2: display selected flavor
+        Pair(stringResource(R.string.quantity), numberOfItems),
         Pair(stringResource(R.string.flavor), orderUiState.flavor),
-        // Summary line 3: display selected pickup date
         Pair(stringResource(R.string.pickup_date), orderUiState.date)
     )
 

@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-private const val PRICE_PER_CUPCAKE = 2.00
+private const val PRICE_PER_ITEM = 2.00
 private const val PRICE_FOR_SAME_DAY_PICKUP = 3.00
 
 class OrderViewModel : ViewModel() {
@@ -21,11 +21,11 @@ class OrderViewModel : ViewModel() {
     val uiState: StateFlow<OrderUiState> = _uiState.asStateFlow()
 
 
-    fun setQuantity(numberCupcakes: Int) {
+    fun setQuantity(numberItems: Int) {
         _uiState.update { currentState ->
             currentState.copy(
-                quantity = numberCupcakes,
-                price = calculatePrice(quantity = numberCupcakes)
+                quantity = numberItems,
+                price = calculatePrice(quantity = numberItems)
             )
         }
     }
@@ -57,8 +57,7 @@ class OrderViewModel : ViewModel() {
         quantity: Int = _uiState.value.quantity,
         pickupDate: String = _uiState.value.date
     ): String {
-        var calculatedPrice = quantity * PRICE_PER_CUPCAKE
-        // If the user selected the first option (today) for pickup, add the surcharge
+        var calculatedPrice = quantity * PRICE_PER_ITEM
         if (pickupOptions()[0] == pickupDate) {
             calculatedPrice += PRICE_FOR_SAME_DAY_PICKUP
         }
@@ -70,7 +69,6 @@ class OrderViewModel : ViewModel() {
         val dateOptions = mutableListOf<String>()
         val formatter = SimpleDateFormat("E MMM d", Locale.getDefault())
         val calendar = Calendar.getInstance()
-        // add current date and the following 3 dates.
         repeat(4) {
             dateOptions.add(formatter.format(calendar.time))
             calendar.add(Calendar.DATE, 1)

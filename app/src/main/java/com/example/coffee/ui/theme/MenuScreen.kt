@@ -76,6 +76,26 @@ fun MenuRow(
 }
 
 @Composable
+fun MenuFoodRow(
+    onItemClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        modifier = modifier
+    ) {
+        items(MenuFoodData) { item ->
+            MenuElement(
+                drawable = item.drawable,
+                text = item.text,
+                onClick = { onItemClick(item.routeId) }
+            )
+        }
+    }
+}
+
+@Composable
 fun MenuSection(
     @StringRes title: Int,
     modifier: Modifier = Modifier,
@@ -104,6 +124,10 @@ fun MenuScreen(
         MenuSection(title = R.string.app_name) {
             MenuRow(onItemClick = onItemClick)
         }
+
+        MenuSection(title = R.string.food_title) {
+            MenuFoodRow(onItemClick = onItemClick)
+        }
     }
 }
 
@@ -130,6 +154,14 @@ private val MenuData = listOf(
         routeId = "caffe mocha",
         drawable = R.drawable.caffe_mocha,
         text = R.string.caffe_mocha
+    )
+)
+
+private val MenuFoodData = listOf(
+    DrawableStringPair(
+        routeId = "bacon egg",
+        drawable = R.drawable.bacon_egg,
+        text = R.string.bacon_egg
     )
 )
 
