@@ -44,6 +44,7 @@ import com.example.coffee.ui.theme.OrderSummaryScreen
 import com.example.coffee.R
 import com.example.coffee.ui.theme.MenuScreen
 import com.example.coffee.ui.theme.CoffeeDetailScreen
+import com.example.coffee.ui.theme.FoodDetailScreen
 
 
 enum class CoffeeScreen(@StringRes val title: Int) {
@@ -120,7 +121,8 @@ fun CoffeeApp(
         ) {
             composable(route = CoffeeScreen.Menu.name) {
                 MenuScreen(
-                    onItemClick = { routeId -> navController.navigate("coffee/$routeId") },
+                    onCoffeeItemClick = { routeId -> navController.navigate("coffee/$routeId") },
+                    onFoodItemClick = { routeId -> navController.navigate("food/$routeId") },
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -129,6 +131,18 @@ fun CoffeeApp(
             composable(route = "coffee/{routeId}") { backStackEntry ->
                 val routeId = backStackEntry.arguments?.getString("routeId").orEmpty()
                 CoffeeDetailScreen(
+                    routeId = routeId,
+                    onBack = { navController.navigateUp() },
+                    onNext = { quantity ->
+                        viewModel.setQuantity(quantity)
+                        navController.navigate(CoffeeScreen.Flavor.name)
+                    }
+                )
+            }
+
+            composable(route = "food/{routeId}") { backStackEntry ->
+                val routeId = backStackEntry.arguments?.getString("routeId").orEmpty()
+                FoodDetailScreen(
                     routeId = routeId,
                     onBack = { navController.navigateUp() },
                     onNext = { quantity ->

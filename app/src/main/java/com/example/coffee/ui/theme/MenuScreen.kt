@@ -115,18 +115,19 @@ fun MenuSection(
 
 @Composable
 fun MenuScreen(
-    onItemClick: (String) -> Unit,
+    onCoffeeItemClick: (String) -> Unit,
+    onFoodItemClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState())
     ) {
         MenuSection(title = R.string.app_name) {
-            MenuRow(onItemClick = onItemClick)
+            MenuRow(onItemClick = onCoffeeItemClick)
         }
 
         MenuSection(title = R.string.food_title) {
-            MenuFoodRow(onItemClick = onItemClick)
+            MenuFoodRow(onItemClick = onFoodItemClick)
         }
     }
 }
@@ -165,6 +166,8 @@ private val MenuFoodData = listOf(
     )
 )
 
+
+                            /* Previews */
 @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
 @Composable
 fun MenuElementPreview() {
