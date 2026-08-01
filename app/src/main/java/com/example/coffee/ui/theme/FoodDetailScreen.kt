@@ -1,6 +1,5 @@
 package com.example.coffee.ui.theme
 
-import android.R
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -26,7 +24,7 @@ fun FoodDetailScreen(
     onNext: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var quantityText by remember { mutableStateOf("1")}
+    var quantityText by remember { mutableStateOf("1") }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -38,7 +36,7 @@ fun FoodDetailScreen(
             text = "Food Details",
             style = MaterialTheme.typography.headlineSmall
         )
-        Text (
+        Text(
             text = "Selected: $routeId",
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(top = 12.dp, bottom = 24.dp)
@@ -47,18 +45,21 @@ fun FoodDetailScreen(
         OutlinedTextField(
             value = quantityText,
             onValueChange = { quantityText = it.filter(Char::isDigit) },
-            label = { Text("Quantity")}
+            label = { Text("Quantity") }
         )
 
         Button(
-            onClick = onBack,
+            onClick = {
+                val qty = quantityText.toIntOrNull()?.coerceAtLeast(1) ?: 1
+                onNext(qty)
+            },
             modifier = Modifier.padding(top = 8.dp)
 
         ) {
             Text("Next")
         }
 
-        Button (
+        Button(
             onClick = onBack,
             modifier = Modifier.padding(top = 8.dp)
 

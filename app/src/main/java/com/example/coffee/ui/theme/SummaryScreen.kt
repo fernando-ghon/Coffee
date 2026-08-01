@@ -35,11 +35,19 @@ fun OrderSummaryScreen(
 ) {
     val resources = LocalContext.current.resources
 
-    val numberOfItems = resources.getQuantityString(
-        R.plurals.coffees,
-        orderUiState.quantity,
-        orderUiState.quantity
-    )
+    val numberOfItems = when (orderUiState.itemType) {
+        MenuItemType.COFFEE -> resources.getQuantityString(
+            R.plurals.coffees,
+            orderUiState.quantity,
+            orderUiState.quantity
+        )
+
+        MenuItemType.FOOD -> resources.getQuantityString(
+            R.plurals.sandwiches,
+            orderUiState.quantity,
+            orderUiState.quantity
+        )
+    }
 
     val orderSummary = stringResource(
         R.string.order_details,

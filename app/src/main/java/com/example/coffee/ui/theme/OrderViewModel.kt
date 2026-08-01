@@ -1,5 +1,6 @@
 package com.example.coffee.ui.theme
 
+import android.view.MenuItem
 import androidx.lifecycle.ViewModel
 import com.example.coffee.data.OrderUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,8 +12,13 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-private const val PRICE_PER_ITEM = 2.00
+private const val COFFEE_PRICE_PER_ITEM = 2.00
+private const val FOOD_PRICE_PER_ITEM = 4.50
 private const val PRICE_FOR_SAME_DAY_PICKUP = 3.00
+
+enum class MenuItemType {
+    COFFEE, FOOD
+}
 
 class OrderViewModel : ViewModel() {
 
@@ -20,6 +26,20 @@ class OrderViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(OrderUiState(pickupOptions = pickupOptions()))
     val uiState: StateFlow<OrderUiState> = _uiState.asStateFlow()
 
+    private var selectedItemType: MenuItemType = MenuItemType.COFFEE
+
+    fun setItemType(type: MenuItemType) {
+        selectedItemType = type
+        _uiState.update { currentState ->
+            currentState.copy(
+                itemType = type,
+                price = calculatePrice(
+                    quantity = currentState.quantity,
+                    pickupDate = currentState.date
+                )
+            )
+        }
+    }
 
     fun setQuantity(numberItems: Int) {
         _uiState.update { currentState ->
@@ -49,6 +69,7 @@ class OrderViewModel : ViewModel() {
 
 
     fun resetOrder() {
+        selectedItemType = MenuItemType.COFFEE
         _uiState.value = OrderUiState(pickupOptions = pickupOptions())
     }
 
@@ -57,12 +78,15 @@ class OrderViewModel : ViewModel() {
         quantity: Int = _uiState.value.quantity,
         pickupDate: String = _uiState.value.date
     ): String {
-        var calculatedPrice = quantity * PRICE_PER_ITEM
+        val unitPrice = when (selectedItemType) {
+            MenuItemType.COFFEE -> COFFEE_PRICE_PER_ITEM
+            MenuItemType.FOOD -> FOOD_PRICE_PER_ITEM
+        }
+        var calculatedPrice = quantity * unitPrice
         if (pickupOptions()[0] == pickupDate) {
             calculatedPrice += PRICE_FOR_SAME_DAY_PICKUP
         }
-        val formattedPrice = NumberFormat.getCurrencyInstance().format(calculatedPrice)
-        return formattedPrice
+        return NumberFormat.getCurrencyInstance().format(calculatedPrice)
     }
 
     private fun pickupOptions(): List<String> {

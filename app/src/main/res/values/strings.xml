@@ -29,6 +29,10 @@
         <item quantity="one">%d coffee</item>
         <item quantity="other">%d coffees</item>
     </plurals>
+    <plurals name="sandwiches">
+        <item quantity="one">%d sandwich</item>
+        <item quantity="other">%d sandwiches</item>
+    </plurals>
     <string name="caffe_americano">Caffe Americano</string>
     <string name="caffe_mocha">Caffe Mocha</string>
     <string name="bacon_egg">Bacon Egg</string>

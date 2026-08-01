@@ -45,6 +45,7 @@ import com.example.coffee.R
 import com.example.coffee.ui.theme.MenuScreen
 import com.example.coffee.ui.theme.CoffeeDetailScreen
 import com.example.coffee.ui.theme.FoodDetailScreen
+import com.example.coffee.ui.theme.MenuItemType
 
 
 enum class CoffeeScreen(@StringRes val title: Int) {
@@ -99,6 +100,7 @@ fun CoffeeApp(
         CoffeeScreen.Pickup.name -> CoffeeScreen.Pickup
         CoffeeScreen.Summary.name -> CoffeeScreen.Summary
         "coffee/{routeId}" -> CoffeeScreen.Menu
+        "food/{routeId}" -> CoffeeScreen.Menu
         else -> CoffeeScreen.Menu
     }
 
@@ -134,6 +136,7 @@ fun CoffeeApp(
                     routeId = routeId,
                     onBack = { navController.navigateUp() },
                     onNext = { quantity ->
+                        viewModel.setItemType(MenuItemType.COFFEE)
                         viewModel.setQuantity(quantity)
                         navController.navigate(CoffeeScreen.Flavor.name)
                     }
@@ -146,8 +149,9 @@ fun CoffeeApp(
                     routeId = routeId,
                     onBack = { navController.navigateUp() },
                     onNext = { quantity ->
+                        viewModel.setItemType(MenuItemType.FOOD)
                         viewModel.setQuantity(quantity)
-                        navController.navigate(CoffeeScreen.Flavor.name)
+                        navController.navigate(CoffeeScreen.Pickup.name)
                     }
                 )
             }
